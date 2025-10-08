@@ -55,9 +55,7 @@ export function useXRSessionModeSupportedPolling(mode: XRSessionMode): boolean |
 
     // Poll every 100ms until support is found
     const interval = setInterval(() => {
-      if (supported !== true) {
-        checkSupport()
-      }
+      checkSupport()
     }, 100)
 
     return () => clearInterval(interval)

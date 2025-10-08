@@ -280,7 +280,7 @@ function CanvasXRLayer({
   canvasScale: number
 }) {
   const [counter, setCounter] = useState(0)
-  const { offscreenCanvas, drawCanvas } = useOffscreenCanvasDrawing(counter, 'XRLayer', canvasWidth, canvasHeight)
+  const { offscreenCanvas } = useOffscreenCanvasDrawing(counter, 'XRLayer', canvasWidth, canvasHeight)
 
   const customRender = useMemo(() => {
     let canvasTexture: CanvasTexture | null = null
@@ -327,7 +327,7 @@ function CanvasMesh({
   canvasScale: number
 }) {
   const [counter, setCounter] = useState(0)
-  const { offscreenCanvas, drawCanvas } = useOffscreenCanvasDrawing(counter, 'Mesh Texture', canvasWidth, canvasHeight)
+  const { offscreenCanvas } = useOffscreenCanvasDrawing(counter, 'Mesh Texture', canvasWidth, canvasHeight)
 
   const canvasTexture = useMemo(() => {
     const texture = new CanvasTexture(offscreenCanvas)
