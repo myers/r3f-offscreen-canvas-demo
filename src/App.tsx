@@ -47,11 +47,15 @@ export function App() {
           <strong>Why this matters:</strong> XRLayer provides sharper visuals, better performance, and lower latency—essential
           for readable text, smooth video playback, and responsive interfaces in VR/AR applications.
         </p>
-        <p style={{ margin: 0, lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
           <strong>How it works:</strong> This demo uses <code>customRender</code> with <code>OffscreenCanvas</code>,
           allowing you to draw anything using standard Canvas 2D API (shapes, text, images, videos) and have it
           rendered at full quality in your VR/AR scene. Perfect for dashboards, control panels, or
           any interactive UI element.
+        </p>
+        <p style={{ margin: 0, lineHeight: '1.6', fontSize: '0.9rem', color: '#666' }}>
+          <strong>Note:</strong> As of October 2025, XRLayers only work on Meta Quest devices using the Meta Browser.
+          On other devices, the left panel will fall back to standard texture rendering, so both panels will appear identical.
         </p>
       </SplashScreen>
       <Canvas
@@ -308,6 +312,7 @@ function CanvasXRLayer({
       shape="quad"
       pixelWidth={canvasWidth}
       pixelHeight={canvasHeight}
+      blendTextureSourceAlpha={true}
     />
   )
 }
