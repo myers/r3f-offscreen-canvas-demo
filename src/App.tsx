@@ -37,28 +37,33 @@ export function App() {
         </h1>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
           In VR/AR experiences, displaying sharp UI, video, or interactive content can be challenging.
-          Traditional approaches render content as textures on 3D objects, which can appear blurry or pixelated due to
-          resolution limitations, texture filtering, and the lack of direct display access.
+          Traditional WebXR renders content to an eye buffer, which the compositor then resamples to match the display—a
+          process called "double sampling." This causes quality degradation and visual distortion.
         </p>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
-          This demo shows a better approach: <strong>XRLayer</strong> lets the VR/AR headset render content directly
-          at native resolution, just like your phone or computer screen. You'll see two panels side-by-side—the
+          This demo shows a better approach: <strong>XRLayer</strong> renders content directly to the compositor,
+          bypassing the eye buffer entirely. You'll see two panels side-by-side—the
           <strong> left</strong> uses XRLayer for crisp rendering, while the <strong>right</strong> uses the
           traditional texture approach for comparison.
         </p>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
-          <strong>Why this matters:</strong> XRLayer provides sharper visuals, better performance, and lower latency—essential
-          for readable text, smooth video playback, and responsive interfaces in VR/AR applications.
+          <strong>Why this matters:</strong> XRLayer eliminates double sampling, providing sharper visuals, up to 50% reduction
+          in GPU usage, better performance, and lower latency—essential for readable text, smooth video playback, and responsive
+          interfaces in VR/AR applications.
         </p>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
           <strong>How it works:</strong> This demo uses <code>customRender</code> with <code>OffscreenCanvas</code>,
           allowing you to draw anything using standard Canvas 2D API (shapes, text, images, videos) and have it
           rendered at full quality in your VR/AR scene. Perfect for dashboards, control panels, or
-          any interactive UI element.
+          any interactive UI element. For more technical details, see{' '}
+          <a href="https://developers.meta.com/horizon/documentation/web/webxr-layers/" target="_blank" rel="noopener noreferrer" style={{ color: '#007AFF' }}>
+            Meta's WebXR Layers documentation
+          </a>.
         </p>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6', fontSize: '0.9rem', color: '#666' }}>
-          <strong>Note:</strong> As of October 2025, XRLayers only work on Meta Quest devices using the Meta Browser.
-          On other devices, the left panel will fall back to standard texture rendering, so both panels will appear identical.
+          <strong>Note:</strong> As of October 2025, XRLayers have native support on Meta Quest devices using the Meta Browser.
+          A WebXR Layers polyfill is available for other browsers. On devices without support, the left panel will fall back to
+          standard texture rendering, so both panels will appear identical.
         </p>
         <GitHubBadge repoUrl="https://github.com/myers/r3f-offscreen-canvas-demo" />
       </SplashScreen>
