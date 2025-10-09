@@ -8,7 +8,7 @@ import { GitHubBadge } from './components/GitHubBadge'
 import { SplashScreen } from './components/SplashScreen'
 
 const store = createXRStore({
-  emulate: { syntheticEnvironment: false },
+  emulate: { syntheticEnvironment: false, inject: true },
   foveation: 0,
   controller: {
     rayPointer: {
