@@ -102,7 +102,7 @@ const EnterXRButton = ({ store }: { store: XRStore }) => {
   }
 
   // Otherwise show single button
-  const text = ar ? 'Enter AR' : vr ? 'Enter VR' : 'No Support'
+  const text = ar ? 'Enter AR' : vr ? 'Enter VR' : 'Your Browser Doesn\'t Support WebXR'
   const handleClick = () => {
     if (ar) {
       store.enterXR('immersive-ar')

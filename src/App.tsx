@@ -4,6 +4,7 @@ import { createXRStore, noEvents, PointerEvents, useXR, useXRInputSourceState, X
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CanvasTexture, SRGBColorSpace, Vector2, Vector3, WebGLRenderTarget } from 'three'
 
+import { GitHubBadge } from './components/GitHubBadge'
 import { SplashScreen } from './components/SplashScreen'
 
 const store = createXRStore({
@@ -36,7 +37,8 @@ export function App() {
         </h1>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
           In VR/AR experiences, displaying sharp UI, video, or interactive content can be challenging.
-          Traditional approaches render content as textures on 3D objects, which can appear blurry or pixelated.
+          Traditional approaches render content as textures on 3D objects, which can appear blurry or pixelated due to
+          resolution limitations, texture filtering, and the lack of direct display access.
         </p>
         <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
           This demo shows a better approach: <strong>XRLayer</strong> lets the VR/AR headset render content directly
@@ -54,10 +56,11 @@ export function App() {
           rendered at full quality in your VR/AR scene. Perfect for dashboards, control panels, or
           any interactive UI element.
         </p>
-        <p style={{ margin: 0, lineHeight: '1.6', fontSize: '0.9rem', color: '#666' }}>
+        <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6', fontSize: '0.9rem', color: '#666' }}>
           <strong>Note:</strong> As of October 2025, XRLayers only work on Meta Quest devices using the Meta Browser.
           On other devices, the left panel will fall back to standard texture rendering, so both panels will appear identical.
         </p>
+        <GitHubBadge repoUrl="https://github.com/myers/r3f-offscreen-canvas-demo" />
       </SplashScreen>
       <Canvas
         events={noEvents}
