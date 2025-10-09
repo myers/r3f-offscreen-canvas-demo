@@ -7,6 +7,7 @@ import { CanvasTexture, SRGBColorSpace, Vector2, Vector3, WebGLRenderTarget } fr
 import { SplashScreen } from './components/SplashScreen'
 
 const store = createXRStore({
+  emulate: { syntheticEnvironment: false },
   foveation: 0,
   controller: {
     rayPointer: {
