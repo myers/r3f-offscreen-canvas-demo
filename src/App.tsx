@@ -4,8 +4,7 @@ import { createXRStore, noEvents, PointerEvents, useXR, useXRInputSourceState, X
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CanvasTexture, LinearFilter, SRGBColorSpace, Vector2, Vector3, WebGLRenderTarget } from 'three'
 
-import { GitHubBadge } from './components/GitHubBadge'
-import { SplashScreen } from './components/SplashScreen'
+import { GitHubBadge, SplashScreen } from '@myers/r3f-tools'
 
 const store = createXRStore({
   emulate: { syntheticEnvironment: false, inject: true },
@@ -64,6 +63,9 @@ export function App() {
           <strong>Note:</strong> As of October 2025, XRLayers have native support on Meta Quest devices using the Meta Browser.
           A WebXR Layers polyfill is available for other browsers. On devices without support, the left panel will fall back to
           standard texture rendering, so both panels will appear identical.
+        </p>
+        <p style={{ margin: '0 0 1rem 0', lineHeight: '1.6' }}>
+          If you browser doesn't support VR you can hit <code>Window/Command + Alt/Option + E</code> to enable the iwer/devui Emulator
         </p>
         <GitHubBadge repoUrl="https://github.com/myers/r3f-offscreen-canvas-demo" />
       </SplashScreen>
