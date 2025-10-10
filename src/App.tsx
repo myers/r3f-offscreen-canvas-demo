@@ -2,7 +2,7 @@ import { Environment } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { createXRStore, noEvents, PointerEvents, useXR, useXRInputSourceState, XR, XRLayer } from '@react-three/xr'
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CanvasTexture, SRGBColorSpace, Vector2, Vector3, WebGLRenderTarget } from 'three'
+import { CanvasTexture, LinearFilter, SRGBColorSpace, Vector2, Vector3, WebGLRenderTarget } from 'three'
 
 import { GitHubBadge } from './components/GitHubBadge'
 import { SplashScreen } from './components/SplashScreen'
@@ -12,9 +12,9 @@ const store = createXRStore({
   foveation: 0,
   controller: {
     rayPointer: {
-      cursorModel: {
-        opacity: 0.9,
-        size: 0.01
+      cursorModel: false,
+      rayModel: {
+        opacity: 1.0
       }
     }
   }
@@ -132,7 +132,7 @@ function useOffscreenCanvasDrawing(counter: number, label: string, canvasWidth: 
   const offscreenCanvas = useMemo(() => new OffscreenCanvas(canvasWidth, canvasHeight), [canvasWidth, canvasHeight])
 
   const drawCanvas = useCallback((canvas: OffscreenCanvas, counter: number, label: string, width: number, height: number) => {
-    const ctx = canvas.getContext('2d', { alpha: true })
+    const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
     const dpr = 2 // For scaling text/graphics
@@ -140,83 +140,10 @@ function useOffscreenCanvasDrawing(counter: number, label: string, canvasWidth: 
     ctx.save()
     ctx.translate(0, height)
     ctx.scale(1, -1)
-    ctx.clearRect(0, 0, width, height)
 
-    // Static black background with gradient fade
-    const radius = 25 * dpr
-    const fadeWidth = 2 * dpr
-
+    // Simple black background
     ctx.fillStyle = 'black'
-    ctx.beginPath()
-    ctx.moveTo(radius, 0)
-    ctx.lineTo(width - radius, 0)
-    ctx.arcTo(width, 0, width, radius, radius)
-    ctx.lineTo(width, height - radius)
-    ctx.arcTo(width, height, width - radius, height, radius)
-    ctx.lineTo(radius, height)
-    ctx.arcTo(0, height, 0, height - radius, radius)
-    ctx.lineTo(0, radius)
-    ctx.arcTo(0, 0, radius, 0, radius)
-    ctx.closePath()
-    ctx.fill()
-
-    // Apply gradient mask for fade to transparent at edges
-    ctx.globalCompositeOperation = 'destination-out'
-
-    // Top gradient
-    const topGradient = ctx.createLinearGradient(0, 0, 0, fadeWidth)
-    topGradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
-    topGradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-    ctx.fillStyle = topGradient
-    ctx.fillRect(radius, 0, width - 2 * radius, fadeWidth)
-
-    // Bottom gradient
-    const bottomGradient = ctx.createLinearGradient(0, height - fadeWidth, 0, height)
-    bottomGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    bottomGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = bottomGradient
-    ctx.fillRect(radius, height - fadeWidth, width - 2 * radius, fadeWidth)
-
-    // Left gradient
-    const leftGradient = ctx.createLinearGradient(0, 0, fadeWidth, 0)
-    leftGradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
-    leftGradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-    ctx.fillStyle = leftGradient
-    ctx.fillRect(0, radius, fadeWidth, height - 2 * radius)
-
-    // Right gradient
-    const rightGradient = ctx.createLinearGradient(width - fadeWidth, 0, width, 0)
-    rightGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    rightGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = rightGradient
-    ctx.fillRect(width - fadeWidth, radius, fadeWidth, height - 2 * radius)
-
-    // Corner radial gradients
-    const tlGradient = ctx.createRadialGradient(radius, radius, radius - fadeWidth, radius, radius, radius)
-    tlGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    tlGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = tlGradient
-    ctx.fillRect(0, 0, radius, radius)
-
-    const trGradient = ctx.createRadialGradient(width - radius, radius, radius - fadeWidth, width - radius, radius, radius)
-    trGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    trGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = trGradient
-    ctx.fillRect(width - radius, 0, radius, radius)
-
-    const blGradient = ctx.createRadialGradient(radius, height - radius, radius - fadeWidth, radius, height - radius, radius)
-    blGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    blGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = blGradient
-    ctx.fillRect(0, height - radius, radius, radius)
-
-    const brGradient = ctx.createRadialGradient(width - radius, height - radius, radius - fadeWidth, width - radius, height - radius, radius)
-    brGradient.addColorStop(0, 'rgba(0, 0, 0, 0)')
-    brGradient.addColorStop(1, 'rgba(0, 0, 0, 1)')
-    ctx.fillStyle = brGradient
-    ctx.fillRect(width - radius, height - radius, radius, radius)
-
-    ctx.globalCompositeOperation = 'source-over'
+    ctx.fillRect(0, 0, width, height)
 
     // Draw label (XRLayer or Mesh Texture)
     ctx.fillStyle = 'white'
@@ -321,7 +248,6 @@ function CanvasXRLayer({
       shape="quad"
       pixelWidth={canvasWidth}
       pixelHeight={canvasHeight}
-      blendTextureSourceAlpha={true}
     />
   )
 }
@@ -346,6 +272,8 @@ function CanvasMesh({
   const canvasTexture = useMemo(() => {
     const texture = new CanvasTexture(offscreenCanvas)
     texture.colorSpace = SRGBColorSpace
+    texture.minFilter = LinearFilter
+    texture.magFilter = LinearFilter
     return texture
   }, [offscreenCanvas])
 
@@ -364,7 +292,7 @@ function CanvasMesh({
       onClick={handleClick}
     >
       <planeGeometry />
-      <meshBasicMaterial map={canvasTexture} toneMapped={false} transparent />
+      <meshBasicMaterial map={canvasTexture} toneMapped={false} />
     </mesh>
   )
 }

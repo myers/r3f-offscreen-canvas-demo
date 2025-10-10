@@ -1,24 +1,14 @@
-# OffscreenCanvas XRLayer Demo
+# High-Quality UI in VR/AR
 
-A React Three Fiber (R3F) demonstration of using `OffscreenCanvas` with `XRLayer` for high-performance rendering in WebXR (VR/AR).
+In VR/AR experiences, displaying sharp UI, video, or interactive content can be challenging. Traditional WebXR renders content to an eye buffer, which the compositor then resamples to match the display—a process called "double sampling." This causes quality degradation and visual distortion.
 
-## Features
+This demo shows a better approach: **XRLayer** renders content directly to the compositor, bypassing the eye buffer entirely. You'll see two panels side-by-side—the **left** uses XRLayer for crisp rendering, while the **right** uses the traditional texture approach for comparison.
 
-- ✨ **OffscreenCanvas** - Efficient canvas rendering off the main thread
-- 🎨 **Animated Background** - Continuously cycling HSL color animation
-- 🖱️ **Interactive Counter** - Click to increment (on-demand updates)
-- 🎯 **Rounded Corners** - Alpha transparency with smooth rounded edges
-- 📱 **High DPR** - 3x device pixel ratio for crisp rendering (5760×3240)
-- 🥽 **WebXR Support** - Works in VR/AR with XRLayer API
-- 🔄 **Efficient Rendering** - Direct texture copy without 3D scene overhead
+**Why this matters:** XRLayer eliminates double sampling, providing sharper visuals, up to 50% reduction in GPU usage, better performance, and lower latency—essential for readable text, smooth video playback, and responsive interfaces in VR/AR applications.
 
-## Technical Highlights
+**How it works:** This demo uses `customRender` with `OffscreenCanvas`, allowing you to draw anything using standard Canvas 2D API (shapes, text, images, videos) and have it rendered at full quality in your VR/AR scene. Perfect for dashboards, control panels, or any interactive UI element. For more technical details, see [Meta's WebXR Layers documentation](https://developers.meta.com/horizon/documentation/web/webxr-layers/).
 
-This demo showcases the **customRender** pattern with **Option 4** (reused CanvasTexture):
-- Creates `CanvasTexture` once and reuses it
-- Uses `copyTextureToTexture()` for direct GPU texture copying
-- **No wasteful 3D scene rendering** - just efficient texture updates
-- Proper alpha blending with `blendTextureSourceAlpha`
+**Note:** As of October 2025, XRLayers have native support on Meta Quest devices using the Meta Browser. A WebXR Layers polyfill is available for other browsers. On devices without support, the left panel will fall back to standard texture rendering, so both panels will appear identical.
 
 ## Getting Started
 
